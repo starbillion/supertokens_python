@@ -35,6 +35,7 @@ from ..utils import PhoneOrEmailInput
 class APIImplementation(APIInterface):
     async def create_code_post(self,
                                email: Union[str, None],
+                               redirect_url: Union[str, None],
                                phone_number: Union[str, None],
                                api_options: APIOptions,
                                user_context: Dict[str, Any]) -> CreateCodePostResponse:
@@ -59,6 +60,7 @@ class APIImplementation(APIInterface):
                     raise Exception("Should never come here")
                 await api_options.config.contact_config.create_and_send_custom_email(CreateAndSendCustomEmailParameters(
                     email=email,
+                    redirect_url=redirect_url,
                     user_input_code=user_input_code,
                     url_with_link_code=magic_link,
                     code_life_time=response.code_life_time,
@@ -127,8 +129,12 @@ class APIImplementation(APIInterface):
                                         ContactEmailOrPhoneConfig) and device_info.email is not None):
                         if device_info.email is None or response.code_life_time is None or response.pre_auth_session_id is None:
                             raise Exception("Should never come here")
+                        redirect_url = None
+                        if "redirect_url" in device_info:
+                            redirect_url = device_info.redirect_url
                         await api_options.config.contact_config.create_and_send_custom_email(CreateAndSendCustomEmailParameters(
                             email=device_info.email,
+                            redirect_url=redirect_url,
                             user_input_code=user_input_code,
                             url_with_link_code=magic_link,
                             code_life_time=response.code_life_time,

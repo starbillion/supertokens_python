@@ -610,6 +610,7 @@ class APIInterface:
     @abstractmethod
     async def create_code_post(self,
                                email: Union[str, None],
+                               redirect_url: Union[str, None],
                                phone_number: Union[str, None],
                                api_options: APIOptions,
                                user_context: Dict[str, Any]) -> CreateCodePostResponse:

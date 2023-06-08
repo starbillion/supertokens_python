@@ -32,6 +32,7 @@ async def create_code(api_implementation: APIInterface, api_options: APIOptions)
         raise_bad_input_exception("Please provide a JSON body")
 
     email: Union[str, None] = None
+    redirect_url: Union[str, None] = None
     phone_number: Union[str, None] = None
 
     if ('email' in body and 'phoneNumber' in body) or (
@@ -51,6 +52,8 @@ async def create_code(api_implementation: APIInterface, api_options: APIOptions)
 
     if 'email' in body:
         email = body['email']
+    if 'redirect_url' in body:
+        redirect_url = body['redirect_url']
     if 'phoneNumber' in body:
         phone_number = body['phoneNumber']
 
@@ -80,7 +83,7 @@ async def create_code(api_implementation: APIInterface, api_options: APIOptions)
         except Exception:
             phone_number = phone_number.strip()
     result = await api_implementation.create_code_post(
-        email=email, phone_number=phone_number, api_options=api_options, user_context={})
+        email=email, redirect_url=redirect_url, phone_number=phone_number, api_options=api_options, user_context={})
     api_options.response.set_json_content(result.to_json())
 
     return api_options.response
