@@ -70,7 +70,7 @@ class CreateAndSendCustomEmailParameters:
                  code_life_time: int,
                  pre_auth_session_id: str,
                  email: str,
-                 redirect_url: str,
+                 redirect_url: str = None,
                  user_input_code: Union[str, None] = None,
                  url_with_link_code: Union[str, None] = None):
         self.email: str = email
